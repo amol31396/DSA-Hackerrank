@@ -1,0 +1,117 @@
+MySQL commands
+---------------
+CREATE TABLE tableName(columnName dataType);
+
+INSERT INTO tableName values();
+
+UPDATE tableName SET columnName=value WHERE condition
+
+DELETE FROM tableName WHERE condition;
+
+CREATE TABLE tableName
+(id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(50) NOT NULL,
+age int NOT NULL,
+city VARCHAR(10) NOT NULL,
+PRIMARY KEY (id));
+
+ALTER TABLE tableName ADD PRIMARY KEY(columnName);
+
+CREATE TABLE tableName
+(id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(50) NOT NULL,
+age int NOT NULL,
+city VARCHAR(10) NOT NULL,
+PRIMARY KEY (id),
+FOREING KEY(city) REFERENCES city(cid));
+{FOREING KEY(columnName) REFERENCES tableName(columnName)}
+
+ALTER TABLE tableName ADD FOREING KEY(columnName) REFERENCES tableName(cid);
+
+INNER JOIN
+-----------
+SELECT columnName FROM tableName1 INNER JOIN tableName2 
+ON tableName1.columnName = tableName2.columnName;
+			{FOREING KEY}			{PRIMARY KEY}
+
+SELECT columnName FROM tableName1 AS t1 INNER JOIN tableName2 AS t2
+ON t1.columnName = t2.columnName;
+	{FOREING KEY}	{PRIMARY KEY}
+			
+LEFT JOIN
+-----------
+SELECT columnName FROM tableName1 LEFT JOIN tableName2 
+ON tableName1.columnName = tableName2.columnName;
+			{FOREING KEY}			{PRIMARY KEY}
+			
+SELECT columnName FROM tableName1 AS t1 LEFT JOIN tableName2 AS t2
+ON t1.columnName = t2.columnName;
+	{FOREING KEY}	{PRIMARY KEY}
+	
+RIGHT JOIN
+-----------
+SELECT columnName FROM tableName1 RIGHT JOIN tableName2 
+ON tableName1.columnName = tableName2.columnName;
+			{FOREING KEY}			{PRIMARY KEY}
+			
+SELECT columnName FROM tableName1 AS t1 RIGHT JOIN tableName2 AS t2
+ON t1.columnName = t2.columnName;
+	{FOREING KEY}	{PRIMARY KEY
+	
+CROSS JOIN
+-----------
+SELECT columnName FROM tableName1 CROSS JOIN tableName2;
+
+SELECT columnName FROM tableName1 AS t1 CROSS JOIN tableName2 AS t2;
+
+JOIN MULTIPLE TABLE's
+----------------------
+SELECT columnName FROM tableName1 INNER JOIN tableName2 
+ON tableName1.columnName=tableName2.columnName{PRIMARY KEY} INNER JOIN
+tableName3 ON tableName1.columnName=tableName3.columnName{PRIMARY KEY};
+
+GROUP BY
+---------
+SELECT columnName FROM tableName WHERE condition GROUP BY columnName;
+
+SELECT columnName FROM tableName1 INNER JOIN tableName2 
+ON tableName1.columnName = tableName2.columnName WHERE condition GROUP BY columnName;
+			{FOREING KEY}			{PRIMARY KEY
+			
+HAVING CLAUSE
+-------------
+SELECT columnName FROM tableName GROUP BY columnName HAVING condition;
+
+SubQuery or Nested Query:-
+--------------------------
+SELECT columnName FROM tableName1 WHERE column = (SELECT columnName FROM tableName2
+WHERE condition);
+
+EXISTS
+------
+SELECT columnName FROM tableName1 EXISTS(SELECT columnName FROM tableName2
+WHERE condition);
+
+NOT EXISTS
+----------
+SELECT columnName FROM tableName1 NOT EXISTS(SELECT columnName FROM tableName2
+WHERE condition);
+
+UNION / UNION ALL
+-----------------
+SELECT columnName FROM tableName1 UNION / UNION ALL SELECT columnName FROM tableName2;
+
+IF CLAUSE
+---------
+SELECT columnName, IF(condition,TRUE Result,FALSE Result) AS alias_name FROM tableName;
+
+CASE CLAUSE
+-----------
+SELECT columnName,
+CASE
+	WHEN condition1 THEN result1
+	WHEN condition2 THEN result2
+	WHEN condition3 THEN result3
+	ELSE result alias_name
+END AS alias_name
+FROM tableName;

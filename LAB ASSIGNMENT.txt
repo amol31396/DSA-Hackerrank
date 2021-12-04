@@ -1,0 +1,234 @@
+LAB ASSIGNMENT
+
+1.
+
+create table DEPT_LAB(DEPTNO int, DNAME varchar(15),LOC varchar(10));
+
+insert into DEPT_LAB values
+(10,'ACCOUNTING','NAINITAL'),
+(20,'RESEARCH','DEHRADUN'),
+(30,'SALES','CHENNAI'),
+(40,'OPERATIONS','BILASPUR');
+
+2.
+
+create table EMP_LAB(
+EMPNO int, 
+ENAME varchar(10),
+JOB varchar(9),
+HIREDATE date,
+SAL float,
+COMM float,
+DEPTNO int
+);
+
+ INSERT INTO EMP_LAB VALUES
+ (7839,'KAILASH','MANAGER','1991-11-17',5000,NULL,10),
+ (7698,'BELA','CLERK','1981-05-01',2850,NULL,30)
+ (7782,'CHETAN','MANAGER','1981-06-09',2450,NULL,10),
+ (7566,'JASPREET','CLERK','1981-04-02',2975,NULL,20)
+ (7654,'MAMTA','SALESMAN','1981-09-28',1250,1400,30)
+ (7499,'AMAR','SALESMAN','1981-02-20',1600,300,30);
+ 
+ 3.
+ 
+SELECT LAST_DAY(HIREDATE) FROM EMP_LAB;
++--------------------+
+| last_day(hiredate) |
++--------------------+
+| 1991-11-30         |
+| 1981-05-31         |
+| 1981-06-30         |
+| 1981-04-30         |
+| 1981-09-30         |
+| 1981-02-28         |
++--------------------+
+
+4.
+ 
+SELECT ENAME, SAL*12 AS 'ANNUAL' FROM EMP_LAB;
++----------+--------+
+| ENAME    | ANNUAL |
++----------+--------+
+| KAILASH  |  60000 |
+| BELA     |  34200 |
+| CHETAN   |  29400 |
+| JASPREET |  35700 |
+| MAMTA    |  15000 |
+| AMAR     |  19200 |
++----------+--------+
+
+5.
+
+select ename, job from emp_lab where deptno=(select deptno from emp_lab where ename='king');
+
+6.
+
+select replace(ename,'A','a') from emp_lab;
++------------------------+
+| replace(ename,'A','a') |
++------------------------+
+| KaILaSH                |
+| BELa                   |
+| CHETaN                 |
+| JaSPREET               |
+| MaMTa                  |
+| aMaR                   |
++------------------------+
+
+7.
+
+select ename NAME,empno NUMBER from emp_lab;
++----------+--------+
+| NAME     | NUMBER |
++----------+--------+
+| KAILASH  |   7839 |
+| BELA     |   7698 |
+| CHETAN   |   7782 |
+| JASPREET |   7566 |
+| MAMTA    |   7654 |
+| AMAR     |   7499 |
++----------+--------+
+
+8.
+
+select ename from emp_lab where sal=(select max(sal) from emp_lab);
++---------+
+| ename   |
++---------+
+| KAILASH |
++---------+
+
+9.
+
+select sum(sal) from emp_lab where deptno=10;
++----------+
+| sum(sal) |
++----------+
+|     7450 |
++----------+
+
+10.
+
+select * from emp_lab where job like '%T';
+
+****************************************************************************************
+
+1.
+
+create table DEPT2 (DEPTNO int,DNAME varchar(15),LOC varchar(10));
+
+mysql> INSERT INTO DEPT2 VALUES 
+(10,'ACCOUNTING','NAGPUR'),
+(20,'RESEARCH','DELHI'),
+(30,'SALES','KOLKATA'),
+(40,'OPERATIONS','MUMBAI');
+
+2.
+
+CREATE TABLE EMP2(EMPNO int,
+ENAME varchar(10),
+JOB varchar(9),
+HIREDATE date,
+SAL float,
+COMM float,
+DEPTNO int);
+
+INSERT INTO EMP2 VALUES
+(7839,'KRISHNA','MANAGER','1991-11-17',5000,NULL,10),
+(7698,'BHAVANA','CLERK','1981-05-01',2850,NULL,30),
+(7782,'CHETAN','MANAGER','1981-06-09',2450,NULL,10),
+(7566,'JAMILA','CLERK','1981-04-02',2975,NULL,20),
+(7654,'MAHENDRA','SALESMAN','1981-09-28',1250,1400,30),
+(7499,'AJIT','SALESMAN','1981-02-20',1600,300,30);
+
+3.
+
+SELECT DISTINCT JOB FROM EMP2;
++----------+
+| JOB      |
++----------+
+| MANAGER  |
+| CLERK    |
+| SALESMAN |
++----------+
+
+4.
+
+SELECT DISTINCT ENAME, DNAME FROM EMP2, DEPT2 WHERE EMP2.DEPTNO=DEPT2.DEPTNO;
+
+SELECT ENAME, DNAME FROM EMP2 INNER JOIN DEPT2 ON EMP2.DEPTNO=DEPT2.DEPTNO;
+
+SELECT columnName FROM tableName1 INNER JOIN tableName2 
+ON tableName1.columnName = tableName2.columnName;
+			{FOREING KEY}			{PRIMARY KEY}
+			
++----------+------------+
+| ENAME    | DNAME      |
++----------+------------+
+| KRISHNA  | ACCOUNTING |
+| BHAVANA  | SALES      |
+| CHETAN   | ACCOUNTING |
+| JAMILA   | RESEARCH   |
+| MAHENDRA | SALES      |
+| AJIT     | SALES      |
++----------+------------+
+
+5.
+
+SELECT ROUND(SAL,-3) FROM EMP2;
++---------------+
+| ROUND(SAL,-3) |
++---------------+
+|          5000 |
+|          3000 |
+|          2000 |
+|          3000 |
+|          1000 |
+|          2000 |
++---------------+
+
+6.
+
+select ename from emp2 where comm is null;
++---------+
+| ename   |
++---------+
+| KRISHNA |
+| BHAVANA |
+| CHETAN  |
+| JAMILA  |
++---------+
+
+7.
+
+select rpad(ename,15,' ') from emp2;
++--------------------+
+| rpad(ename,15,' ') |
++--------------------+
+| KRISHNA            |
+| BHAVANA            |
+| CHETAN             |
+| JAMILA             |
+| MAHENDRA           |
+| AJIT               |
++--------------------+
+
+8.
+
+select (9%5); MOD(9,5);
++-------+
+| (9%5) |
++-------+
+|     4 |
++-------+
+
+9.
+
+select job, min(sal) Salary from emp2 group by job;
+
+10.
+
+select dname, ename from dept2 left join emp2 on emp2.deptno = dept2.deptno;
+
+

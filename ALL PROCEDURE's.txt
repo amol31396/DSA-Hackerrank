@@ -1,0 +1,303 @@
+ALL PROCEDURE's
+=============================================================================================
+Q.	Write a stored procedure to convert a temperature in Fahrenheit (F) to its equivalent in
+	Celsius (C). The required formula is:- C= (F-32)*5/9
+	Insert the temperature in Centigrade into TEMPP table. Calling program for the stored
+	procedure need not be written.
+
+DELIMITER //
+CREATE PROCEDURE Centigrade(F FLOAT)
+BEGIN
+		DECLARE C FLOAT;
+        SET C = (F-32)*5/9;
+        INSERT INTO TEMPP2 VALUES (C);
+END; //
+DELIMITER ;
+
+CALL Centigrade(121);
+
+CREATE TABLE TEMPP2 (TEMP FLOAT);
+
+=============================================================================================
+Q.	Write a stored procedure by the name of Simp_intr to calculate the amount of interest 
+	on a bank account. The formulae are:- 
+
+	Intr = p*t*r/100
+	Amt = p + Intr
+where:-
+	Intr is the total interest earned.
+	p is the principal, 
+	t is the number of years the money is earning interest, and
+	r is the rate of interest.
+Your stored procedure should accept the values of p, t and r as parameters and insert 
+the Interest and Total amount into a suitable TEMPP output table.  Calling program for 
+the stored procedure need not be written.
+
+DELIMITER //
+CREATE PROCEDURE Simp_intr(p int, t int, r float)
+BEGIN
+	DECLARE Intr float;
+    SET Intr = p*t*r/100;
+    INSERT INTO TEMPP VALUES(p,t,r,Intr);
+END; //
+DELIMITER ;
+
+CALL Simp_intr(1000,1,10);
+
+CREATE TABLE TEMPP (p int, t int, r float, Intr float);
+
+=============================================================================================
+Q.	Write a stored procedure by the name of HRA_calc. 
+	The Empno, Deptno and Sal should be passed as parameters to your stored procedure.
+	The formulae are as follows:-
+
+	If deptno = 10 then HRA = 20% of sal,
+	If deptno = 20 then HRA = 30% of sal,
+	For all other deptnos, HRA = 10% of sal.
+
+	Your stored procedure should insert the Empno, Deptno, Sal and the HRA into a suitable
+	TEMPP output table. Calling program for the stored procedure need not be written.
+
+CREATE PROCEDURE HRA_calc(empno int, deptno int, sal float)
+BEGIN
+		DECLARE hra float;
+		IF deptno = 10 THEN
+			SET hra = sal * 0.2;
+		ELSEIF deptno = 20 THEN
+			SET hra = sal * 0.3;
+		ELSE
+			SET hra = sal * 0.1;
+		END IF;
+		INSERT INTO TEMPP VALUES (empno, deptno, sal, hra);
+END; //
+DELIMITER ;
+
+CALL HRA_calc(1,10,5000);
+
+CREATE TABLE TEMPP (Empno int, Deptno int, Sal float, HRA float);
+
+=============================================================================================
+Q.	 Write a program that computes the perimeter and the area of a rectangle. Define 
+	your own values for the length and width. (Assuming that L and W are the length 
+	and width of the rectangle, Perimeter = 2*(L+W) and Area = L*W. 
+
+CREATE TABLE TEMPP(AREA FLOAT, PERIMETER FLOAT);
+DELIMITER //
+CREATE PROCEDURE COMP(len FLOAT, wid FLOAT)
+BEGIN
+		DECLARE area FLOAT;
+        DECLARE perimeter FLOAT;
+        SET perimeter = 2*(len+wid);
+        SET area = len * wid;
+        INSERT INTO TEMPP VALUES (area, perimeter);
+END; //
+DELIMITER ;
+
+CALL COMP(4,3);
+=============================================================================================
+Q.	Write a stored function by the name of Num_cube. The stored function should return the
+	cube of a number ‘N’. The number ‘N’ should be passed to the stored function as a
+	parameter. Calling program for the stored function need not be written.
+	
+DELIMITER //
+CREATE FUNCTION Num_cube(num INT)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	RETURN num*num*num;
+END; //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE Call_NumCube(num INT)
+BEGIN
+		DECLARE num2 int;
+        SET num2=Num_Cube(num);
+        INSERT INTO TEMPP VALUES(num2);
+END; //
+DELIMITER ;
+
+call Call_NumCube(3);
+=============================================================================================
+Q.	Write a stored function by the name of Days_between.  
+	The stored function should accept ‘D1’ and ‘D2’ as date parameters.  
+	The stored function should return the number of days between the two dates.  
+	Calling program for the stored function need not be written.
+	
+DELIMITER //
+CREATE FUNCTION Days_between(D1 DATE, D2 DATE)
+RETURNS INT
+DETERMINISTIC
+BEGIN
+	return D1-D2;
+END; //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE day(D1 DATE, D2 DATE)
+BEGIN
+	DECLARE days INT;
+    SET days = Days_between(D1,D2);
+    INSERT INTO TEMPP VALUES (days);
+END; //
+DELIMITER ;
+
+CALL day('1990-01-31','1990-01-01');
+=============================================================================================
+use cdacmumbaipgdacsep2021;
+drop table if exists dept;
+
+create table DEPT(DEPTNO int(2),DNAME varchar(14),LOC varchar(13));
+
+insert into DEPT(DEPTNO,DNAME,LOC) values (10,'ACCOUTING','NEW YORK'),
+(20,'RESERCH','DALLAS'),
+(30,'SALES','CHICAGO'),
+(40,'OPERATION','BOSTON');
+
+DROP TABLE IF EXISTS EMP;
+
+create table EMP(
+EMPNO int(4),
+ENAME varchar(10),
+JOB varchar(9),
+HIREDATE date,
+SAL float(7,2),
+COMM float(7,2),
+DEPTNO int(2)
+);
+
+insert into EMP (EMPNO,ENAME,JOB,HIREDATE,SAL,COMM,DEPTNO) values
+(7369,'SMITH','CLERK','1980-12-17',800,null,20),
+(7499,'ALLEN','SALESMAN','1981-02-20',1600,300,30),
+(7521, 'WARD', 'SALESMAN', '1981-02-22', 1250, 500, 30),
+(7566, 'JONES', 'MANAGER', '1981-04-02', 2975, null, 20),
+(7654, 'MARTIN', 'SALESMAN', '1981-09-28', 1250, null, 30),
+(7698, 'BLAKE', 'MANAGER', '1981-04-01', 2850, null, 30),
+(7782, 'CLARK', 'MANAGER', '1981-06-09', 2450, null, 10),
+(7788, 'SCOTT', 'ANALYST', '1980-12-09', 3000, null, 20),
+(7839, 'KING', 'PRESIDENT', '1981-11-17', 5000, null, 10),
+(7844, 'TURNER', 'SALESMAN', '1981-09-08', 1500, 0, 30),
+(7876, 'ADAMS', 'CLERK', '1983-01-12', 1100, null, 20),
+(7900, 'JAMES', 'CLERK', '1981-12-02', 950, null, 30),
+(7902, 'FORD', 'ANALYST', '1981-12-03', 3000, null, 20),
+(7934, 'MILLER', 'CLERK', '1882-01-12', 1300, null, 10);
+
+SELECT EMPNO,ENAME FROM EMP;
+
+SELECT ENAME FROM EMP WHERE JOB IN ('CLERK','MANAGER');
+
+SELECT ENAME, JOB FROM EMP WHERE DEPTNO = (SELECT DEPTNO FROM EMP WHERE ENAME='KING');
+
+SELECT ENAME FROM EMP WHERE month(HIREDATE) = 2;
+
+select ename from emp order by deptno desc;
+
+select ename NAME, empno NUMBER from emp;
+
+select ename from emp where sal=(select max(sal) from emp);
+
+select sum(sal) from emp where deptno=10;
+
+select * from emp where job like '%T';
+
+
+
+SELECT date_format('2019-02-15','%d-%b-%y');
+
+===========================================================================================
+
+use cdacmumbaipgdacsep2021;
+DROP TABLE IF EXISTS customers;
+CREATE TABLE customers (
+customer_Id INT(11) NOT NULL,
+First_Name varchar(50) NOT NULL,
+Last_Name varchar(50) NOT NULL,
+Phone varchar(50) NOT NULL,
+creditLimit decimal(10,2) DEFAULT NULL,
+PRIMARY KEY (customer_Id));
+
+INSERT INTO customers(customer_Id, First_Name, Last_Name, Phone, creditLimit) VALUES
+(103,'Atelier','Schmit','08-78966578','21000.00'),
+(112,'Signal','King','7025551838','71800.00'),
+(114,'Ferguson','Peter','03-95204555','117300.00') ,
+(119,'Labrune','Janine','40.67.8555','118200.00'),
+(121,'Bergulfsen','Jonas','07-989555','81700.00'),
+(124,'Nelson','Susan','4155551450','210500.00'),
+(125,'Piestrzeniewicz','Zbyszek','(26) 642-7555','0.00'),
+(128,'Keitel','Roland','+49 69 66 90 2555','59700.00'),
+(129,'Murphy','Julie','6505555787','64600.00'),
+(131,'Lee','Kwai','2125557818','114900.00'),
+(141,'Freyre','Diego','(91) 555 94 44','227600.00'),
+(144,'Berglund','Christina','0921-12 3555','53100.00'),
+(145,'Petersen','Jytte ','31 12 3555','83400.00'),
+(146,'Saveley','Mary','78.32.5555','123900.00'),
+(148,'Eric','Jecob','+65 7555','103800.00'),
+(151,'Young','Jeff','2125557413','138500.00');
+
+DROP TABLE IF EXISTS orders;
+
+CREATE TABLE orders(
+order_Id INT(11) NOT NULL,
+order_Date date NOT NULL,
+shipped_Date date DEFAULT NULL,
+Deliver varchar(15) NOT NULL,
+customer_Id INT(11) NOT NULL,
+PRIMARY KEY (order_Id),
+FOREIGN KEY (customer_Id) REFERENCES customers(customer_Id) ON DELETE cascade);
+
+INSERT INTO orders (order_Id,order_Date,shipped_Date,Deliver,customer_Id) VALUES
+(10100,'2003-01-06','2003-01-13','Shipped',114),
+(10101,'2003-01-29','2003-02-07','Shipped',125),
+(10102,'2003-01-10','2003-01-18','Shipped',129),
+(10103,'2003-01-29','2003-02-07','Shipped',121),
+(10104,'2003-01-31','2003-02-09','Shipped',141),
+(10105,'2003-02-11','2003-02-21','Shipped',145);
+
+select * from orders;
+
+select * from customers;
+
+ALTER TABLE orders ADD COLUMN package_stat varchar(20);
+
+UPDATE orders SET package_stat = 'not available'; 
+
+DELETE FROM customers WHERE creditLimit=0.00;
+
+select first_name from customers where first_name LIKE '%el%';
+
+select concat(first_name, ' ' ,Last_name) Name, customers.customer_Id, order_Id from customers inner join orders on customers.customer_Id=orders.customer_Id;
+
+select count(creditLimit) from customers where creditLimit > 50000;
+
+select customers.customer_Id, concat(first_name,' ',last_name) Name,order_Id, deliver from customers join orders on customers.customer_Id=orders.customer_Id;
+
+select concat(first_name,' ',last_name) name from customers order by creditLimit;
+
+delimiter //
+create procedure order_day(x date)
+begin
+	select customer_Id,dayname(x) Day from orders where order_Date=x;
+end; //
+delimiter ;
+
+call order_day('2003-01-10');
+	
+drop procedure order_day;
+
+delimiter //
+create function customer_search()
+returns decimal
+deterministic
+begin
+	declare x decimal;
+    select max(creditLimit) into x from customers;
+	return x;
+end; //
+delimiter ;
+
+select customer_search() from dual;
+
+drop function customer_search;
+
+
+
